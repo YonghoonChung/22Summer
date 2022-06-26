@@ -14,8 +14,10 @@ public class Buttons extends JButton implements MouseListener {
 	public static JButton[] buttons = new JButton[9];
 	static boolean[] draw = new boolean[4]; // 라인인지,
 	static boolean erase = false;
+	static boolean lastButton = false; //false -> shape, true -> sketch
+	boolean flag = false;
 
-	String buttonNames[] = { "Line", "Rectangle", "Circle", "Sketch", "Color", "Stroke", "Erase", "", "" };
+	String buttonNames[] = { "Line", "Rectangle", "Circle", "Sketch", "Color", "Stroke", "Erase", "Undo", "Redo" };
 
 	public Buttons() {
 		for (int i = 0; i < buttons.length; i++) {
@@ -25,7 +27,7 @@ public class Buttons extends JButton implements MouseListener {
 			}
 			buttons[i].setVisible(true);
 			buttons[i].addMouseListener(this);
-			buttons[i].setFont(new Font("Arial", Font.BOLD, 25));
+			buttons[i].setFont(new Font("Arial", Font.BOLD, 20));
 			buttons[i].setBackground(Color.GRAY);
 			buttons[i].setForeground(Color.WHITE);
 			// decorate();
@@ -37,6 +39,7 @@ public class Buttons extends JButton implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 
 		JButton button = (JButton) e.getSource();
+		String str = button.getText();
 		if (button == buttons[0]) { // line
 			setInit();
 			draw[0] = true;
@@ -68,24 +71,40 @@ public class Buttons extends JButton implements MouseListener {
 		if (button == buttons[6]) { // Erase
 			setInit();
 			erase = true;
-			//System.out.println("HELLO");
 		}
 		if (button == buttons[7]) { // Undo
+//			setInit();
+			undo();
 		}
-		if (button == buttons[8]) { // Stroke
-			new StrokeChooser();
+		if (button == buttons[8]) { // redo
+			redo();
 		}
-//		for (int i = 0; i < draw.length; i++) {
-//			System.out.println("버튼클릭 : " + draw[i]);
-//		}
+		Frame.screen2.setText(str);
+
+	}
+	private void redo() {
+		// TODO Auto-generated method stub
+		if(!lastButton) {
+			if(!DrawScreen.shapeRedoMemory.isEmpty()) {
+			DrawScreen.shapeMemory.add(DrawScreen.shapeRedoMemory.pop());
+			DrawScreen.colorMemory.add(DrawScreen.colorRedoMemory.pop());
+			DrawScreen.strokeMemory.add(DrawScreen.strokeRedoMemory.pop());
+			Frame.panel2.repaint();
+			}
+		}
 	}
 
-//	private void print() {
-//		for (int i = 0; i < draw.length; i++) {
-//			System.out.println(i+"번 "+draw[i]);
-//		}
-//		System.out.println();
-//	}
+	private void undo() {
+		// TODO Auto-generated method stub
+		if(!lastButton) {
+			if(!DrawScreen.shapeMemory.isEmpty()) {
+			DrawScreen.shapeRedoMemory.add(DrawScreen.shapeMemory.pop());
+			DrawScreen.colorRedoMemory.add(DrawScreen.colorMemory.pop());
+			DrawScreen.strokeRedoMemory.add(DrawScreen.strokeMemory.pop());
+			Frame.panel2.repaint();
+			}
+		}
+	}
 
 	public void setInit() {
 		// TODO Auto-generated method stub

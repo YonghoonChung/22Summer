@@ -8,7 +8,7 @@ import java.awt.Font;
 
 public class StrokeChooser extends JFrame{
 	public static int stroke = 5;
-	JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 20, 10);
+	JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 50, 8);
 	JLabel l = new JLabel();
 	
 	public StrokeChooser(){
@@ -42,7 +42,7 @@ public class StrokeChooser extends JFrame{
 			stroke = slider.getValue();
 	        l.setText(""+stroke);
 	        if(stroke >9) {
-	        	Buttons.buttons[5].setFont(new Font("Arial", Font.BOLD, 20));
+	        	Buttons.buttons[5].setFont(new Font("Arial", Font.BOLD, 18));
 	        }
 	        Buttons.buttons[5].setText("Stroke : " + StrokeChooser.stroke);
 		}
