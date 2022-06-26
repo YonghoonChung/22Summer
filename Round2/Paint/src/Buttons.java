@@ -83,12 +83,9 @@ public class Buttons extends JButton implements MouseListener {
 
 	}
 	private void redo() {
-		// TODO Auto-generated method stub
 		if(!lastButton) {
-			if(!DrawScreen.shapeRedoMemory.isEmpty()) {
-			DrawScreen.shapeMemory.add(DrawScreen.shapeRedoMemory.pop());
-			DrawScreen.colorMemory.add(DrawScreen.colorRedoMemory.pop());
-			DrawScreen.strokeMemory.add(DrawScreen.strokeRedoMemory.pop());
+			if(!DrawScreen.memo.isEmpty()) {
+			DrawScreen.memo.add(DrawScreen.redoMemory.pop());
 			Frame.panel2.repaint();
 			}
 		}
@@ -97,11 +94,9 @@ public class Buttons extends JButton implements MouseListener {
 	private void undo() {
 		// TODO Auto-generated method stub
 		if(!lastButton) {
-			if(!DrawScreen.shapeMemory.isEmpty()) {
-			DrawScreen.shapeRedoMemory.add(DrawScreen.shapeMemory.pop());
-			DrawScreen.colorRedoMemory.add(DrawScreen.colorMemory.pop());
-			DrawScreen.strokeRedoMemory.add(DrawScreen.strokeMemory.pop());
-			Frame.panel2.repaint();
+			if(!DrawScreen.memo.isEmpty()) {
+				DrawScreen.redoMemory.add(DrawScreen.memo.pop());
+				Frame.panel2.repaint();
 			}
 		}
 	}

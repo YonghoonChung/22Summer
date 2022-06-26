@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 
 import javax.swing.JPanel;
@@ -19,24 +20,14 @@ import java.awt.Color;
 
 public class DrawScreen extends JPanel {
 	Point start, end;
-	Point firstPointer = new Point(0, 0);
-	Point secondPointer = new Point(0, 0);
-
-	static Stack<Object> shapeMemory = new Stack<Object>();
-	static Stack<Color> colorMemory = new Stack<Color>();
-	static Stack<Integer> strokeMemory = new Stack<Integer>();
-	static Stack<Object> shapeRedoMemory = new Stack<Object>();
-	static Stack<Color> colorRedoMemory = new Stack<Color>();
-	static Stack<Integer> strokeRedoMemory = new Stack<Integer>();
-	Stack <Data> data= new Stack<Data>();
-	
-	
-
-	static ArrayList<Line2D> sketchMemory = new ArrayList<Line2D>();
-	static ArrayList<Object> sketchColorMemory = new ArrayList<Object>();
-	static ArrayList<Integer> sketchStrokeMemory = new ArrayList<Integer>();
+	Point a = new Point(0, 0);
+	Point b = new Point(0, 0);
 
 
+	static Stack<Data> memo = new Stack<Data>();
+
+	static ArrayList<Point> sketchMemory;
+	public static Stack<Data> redoMemory = new Stack<Data>();
 
 	Line2D.Double line;
 	Rectangle2D.Double rectangle;
@@ -49,6 +40,7 @@ public class DrawScreen extends JPanel {
 		MyMouseListener listener = new MyMouseListener();
 
 		addMouseListener(listener);
+		ColorChooser.color = Color.BLACK;
 		addMouseMotionListener(listener);
 		setBackground(Color.WHITE);
 		Frame.panel2.add(this);
@@ -58,30 +50,49 @@ public class DrawScreen extends JPanel {
 		super.paintComponent(g); // 부모 페인트호출
 		Graphics2D g2 = (Graphics2D) g.create();
 
-		if (shapeMemory.size() != 0) {
-			for (int i = 0; i < shapeMemory.size(); i++) {
-				g2.setColor(colorMemory.get(i));
-				g2.setStroke(new BasicStroke(strokeMemory.get(i)));
-				g2.draw((Shape) shapeMemory.get(i));
-				data.add();
+//		if (shapeMemory.size() != 0) {
+//			for (int i = 0; i < shapeMemory.size(); i++) {
+////				g2.setColor(colorMemory.get(i));
+////				g2.setStroke(new BasicStroke(strokeMemory.get(i)));
+////				g2.draw((Shape) shapeMemory.get(i));
+//			}
+//			for (int i = 0; i < sketchMemory.size(); i++) {
+//				g2.setColor((Color) sketchColorMemory.get(i));
+//				g2.setStroke(new BasicStroke(sketchStrokeMemory.get(i)));
+//				g2.draw(sketchMemory.get(i));
+//			}
+//		}
+		if (!memo.isEmpty())
+			for (int i = 0; i < memo.size(); i++) {
+				//System.out.println(memo.get(i).shape);
+				// System.out.println(i+ " "+ memo.get(i));
+				g2.setColor(memo.get(i).color);
+				g2.setStroke(new BasicStroke(memo.get(i).getStroke()));
+				if (memo.get(i).shape == null) {
+					for (int j = 0; j < memo.get(i).sketch.size()-1; j++) {
+						//System.out.println(memo.get(i).sketch.get(j).x + " " + memo.get(i).sketch.get(j).y);
+						g2.drawLine(memo.get(i).sketch.get(j).x, memo.get(i).sketch.get(j).y, memo.get(i).sketch.get(j+1).x, memo.get(i).sketch.get(j+1).y);
+					}
+				} else {
+					g2.draw((Shape) memo.get(i).shape);
+					
+				}
+					System.out.println(memo.get(i).color);
 			}
-			for (int i = 0; i < sketchMemory.size(); i++) {
-				g2.setColor((Color) sketchColorMemory.get(i));
-				System.out.println(sketchColorMemory.get(i));
-				g2.setStroke(new BasicStroke(sketchStrokeMemory.get(i)));
-				g2.draw(sketchMemory.get(i));
-			}
-		}
+		System.out.println("---------------------------");
 	}
 
 	public class MyMouseListener extends MouseInputAdapter {
+		int count = 0;
 		public void mousePressed(MouseEvent e) {
+			
 			ColorChooser.colorChange = false;
 			start = e.getPoint(); // 클릭한부분을 시작점으로
-			firstPointer.setLocation(0, 0);
-			secondPointer.setLocation(0, 0);
+			a.setLocation(0, 0);
+			b.setLocation(0, 0);
 
-			firstPointer.setLocation(e.getX(), e.getY());
+			a.setLocation(e.getX(), e.getY());
+			sketchMemory = new ArrayList<Point>();
 		}
 
 		public void mouseReleased(MouseEvent e) {
@@ -99,35 +110,38 @@ public class DrawScreen extends JPanel {
 			int absY = Math.abs(start.y - end.y);
 			if (Buttons.draw[0] == true) {
 				shape = new Line2D.Double(start.x, start.y, end.x, end.y);
-				shapeMemory.add(shape);
-				g2.draw(shape);
-				colorMemory.add(ColorChooser.color);
-				strokeMemory.add(StrokeChooser.stroke);
-				// memoryPrint();
+				//g2.draw(shape);
+				memo.add(new Data(shape, ColorChooser.color, StrokeChooser.stroke));
+				repaint();
 			}
 			if (Buttons.draw[1] == true) {
 				shape = new Rectangle2D.Double(twoDx, twoDy, absX, absY);
-				g2.draw(shape);
-				shapeMemory.add(shape);
-				colorMemory.add(ColorChooser.color);
-				strokeMemory.add(StrokeChooser.stroke);
-				// memoryPrint();
+				//g2.draw(shape);
+				memo.add(new Data(shape, ColorChooser.color, StrokeChooser.stroke));
+				repaint();
 			}
 			if (Buttons.draw[2] == true) {
 				shape = new Ellipse2D.Double(twoDx, twoDy, absX, absY);
-				g2.draw(shape);
-				shapeMemory.add(shape);
-				colorMemory.add(ColorChooser.color);
-				strokeMemory.add(StrokeChooser.stroke);
-				// memoryPrint();
+				//g2.draw(shape);
+				memo.add(new Data(shape, ColorChooser.color, StrokeChooser.stroke));
+				repaint();
 			}
-			
-			shapeRedoMemory.clear();
-			colorRedoMemory.clear();
-			strokeRedoMemory.clear();
+			if (Buttons.draw[3] == true) {
+				memo.add(new Data(sketchMemory, ColorChooser.color, StrokeChooser.stroke));
+
+				repaint();
+				//sketchMemory.clear();
+			}
+			if (Buttons.erase == true) {
+				memo.add(new Data(sketchMemory, Color.WHITE, 30));
+				
+			}
+
+			redoMemory.clear();
 		}
 
 		public void mouseDragged(MouseEvent e) {
+
 			end = e.getPoint();
 			Graphics g = getGraphics();
 			Graphics2D g2 = (Graphics2D) g;
@@ -142,54 +156,44 @@ public class DrawScreen extends JPanel {
 			if (Buttons.draw[0] == true) {
 				repaint();
 				g2.drawLine(start.x, start.y, end.x, end.y);
+				return;
 			}
 			if (Buttons.draw[1] == true) {
 				repaint();
 				g2.drawRect(twoDx, twoDy, absX, absY);
+				return;
 			}
 			if (Buttons.draw[2] == true) {
 				repaint();
 				g2.drawOval(twoDx, twoDy, absX, absY);
+				return;
 			}
 			if (Buttons.draw[3] == true) {// sketch
-				if (secondPointer.x != 0 && secondPointer.y != 0) {
-					firstPointer.x = secondPointer.x;
-					firstPointer.y = secondPointer.y;
+				if (b.x != 0 && b.y != 0) {
+					a.x = b.x;
+					a.y = b.y;
 				}
-				secondPointer.setLocation(e.getX(), e.getY());
-				// updatePaint();
-				g2.setColor(ColorChooser.color);
-				g2.setStroke(new BasicStroke(StrokeChooser.stroke));
-				line = new Line2D.Double(firstPointer.x, firstPointer.y, secondPointer.x, secondPointer.y);
-				g2.draw(line);
-				sketchMemory.add(line);
-				sketchColorMemory.add(ColorChooser.color);
-				sketchStrokeMemory.add(StrokeChooser.stroke);
-				// memory.add(sketchMemory);
-				// color.add(sketchColorMemory);
-				// stroke.add(sketchStrokeMemory);
-				// sketchMemory.clear();
-				// sketchColorMemory.clear();
-				// sketchStrokeMemory.clear();
+				b.setLocation(e.getX(), e.getY());
+				g2.drawLine(a.x, a.y, b.x, b.y);
+				sketchMemory.add(new Point(e.getX(),e.getY()));
 			}
-			if(Buttons.erase == true) {
-				System.out.println("Hello");
-				if (secondPointer.x != 0 && secondPointer.y != 0) {
-					firstPointer.x = secondPointer.x;
-					firstPointer.y = secondPointer.y;
+			if (Buttons.erase == true) { // 지우개
+				if (b.x != 0 && b.y != 0) {
+					a.x = b.x;
+					a.y = b.y;
 				}
-				secondPointer.setLocation(e.getX(), e.getY());
+				b.setLocation(e.getX(), e.getY());
+				g2.drawLine(a.x, a.y, b.x, b.y);
+				sketchMemory.add(new Point(e.getX(),e.getY()));
 				g2.setColor(Color.WHITE);
 				g2.setStroke(new BasicStroke(30));
-				line = new Line2D.Double(firstPointer.x, firstPointer.y, secondPointer.x, secondPointer.y);
-				g2.draw(line);
-				sketchMemory.add(line);
-				sketchColorMemory.add(Color.WHITE);
-				sketchStrokeMemory.add(30);
+				g2.drawLine(a.x, a.y, b.x, b.y);
+				
+				sketchMemory.add(new Point(e.getX(),e.getY()));
 			}
 		}
 
-		public void mouseMoved(MouseEvent e) {
+		public void mouseMoved(MouseEvent e) { // 지우개 
 			Graphics g = getGraphics();
 			Graphics2D g2 = (Graphics2D) g;
 			if (Buttons.erase == true) {
@@ -198,7 +202,7 @@ public class DrawScreen extends JPanel {
 				g2.setStroke(new BasicStroke(30));
 				line = new Line2D.Double(e.getPoint().x, e.getPoint().y, e.getPoint().x, e.getPoint().y);
 				g2.draw(line);
-				
+
 			}
 		}
 	}

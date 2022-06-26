@@ -1,25 +1,40 @@
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
-import java.awt.geom.Line2D;
 
 public class Data {
-	Object s;
-	Color c;
-	int stroke;
-	ArrayList<Line2D.Double> sketch;
-	
-	public Data(Object s, Color c, int stroke) {
-		this.s =s;
-		this.c= c;
+	Object shape;
+	Color color;
+	private int stroke;
+	ArrayList<Point> sketch;
+
+	public Data(Object shape, Color color, int stroke) {
+		this.shape = shape;
+		this.color = color;
 		this.stroke = stroke;
 		this.sketch = null;
 	}
-	public Data(ArrayList<Line2D.Double> sketch, Color c, int stroke) {
-		this.s =null;
-		this.c= c;
+
+	public Data(ArrayList<Point> ske, Color color, int stroke) {
+		this.shape = null;
+		this.color = color;
 		this.stroke = stroke;
-		this.sketch = sketch;
+		this.sketch = ske;
+//		for (int i = 0; i < sketch.size(); i++) {
+//			System.out.println(sketch.get(i));
+//		}
+		//
+//		for (int i = 0; i < ske.size(); i++)
+//			this.sketch.add(ske.get(i));
+	}
+
+	public int getStroke() {
+		return stroke;
+	}
+
+	public void setStroke(int stroke) {
+		this.stroke = stroke;
 	}
 	
 }

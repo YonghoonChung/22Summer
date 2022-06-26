@@ -29,7 +29,6 @@ public class StrokeChooser extends JFrame{
         l.setText("슬라이더를 움직이세요 : " + stroke);
         l.setBounds(20,20,150,40);
         this.add(l, BorderLayout.NORTH);
-        System.out.println(stroke);
         this.add(slider, BorderLayout.CENTER);
         this.setSize(300,300);
         this.setVisible(true);
