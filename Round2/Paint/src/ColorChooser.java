@@ -18,6 +18,7 @@ public class ColorChooser extends JFrame implements ChangeListener{
 		color = colorChooser.getColor();
 		colorChange = true;
 		//System.out.print("\""+Integer.toHexString(color.getRGB())+"\", ");
+		System.out.println(color.WHITE);
 		Buttons.buttons[4].setBackground(color);
 	}
 	

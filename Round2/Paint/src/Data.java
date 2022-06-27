@@ -8,19 +8,22 @@ public class Data {
 	Color color;
 	private int stroke;
 	ArrayList<Point> sketch;
+	boolean strokeType;
 
-	public Data(Object shape, Color color, int stroke) {
+	public Data(Object shape, Color color, int stroke, boolean strokeStyle) {
 		this.shape = shape;
 		this.color = color;
 		this.stroke = stroke;
 		this.sketch = null;
+		this.strokeType = strokeStyle;
 	}
 
-	public Data(ArrayList<Point> ske, Color color, int stroke) {
+	public Data(ArrayList<Point> ske, Color color, int stroke, boolean strokeStyle) {
 		this.shape = null;
 		this.color = color;
 		this.stroke = stroke;
 		this.sketch = ske;
+		this.strokeType = strokeStyle;
 //		for (int i = 0; i < sketch.size(); i++) {
 //			System.out.println(sketch.get(i));
 //		}

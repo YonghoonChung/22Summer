@@ -32,6 +32,7 @@ public class StrokeChooser extends JFrame{
         this.add(slider, BorderLayout.CENTER);
         this.setSize(300,300);
         this.setVisible(true);
+        pack();
 	}
     class MyChangeListener implements ChangeListener{
 
@@ -41,9 +42,11 @@ public class StrokeChooser extends JFrame{
 			stroke = slider.getValue();
 	        l.setText(""+stroke);
 	        if(stroke >9) {
-	        	Buttons.buttons[5].setFont(new Font("Arial", Font.BOLD, 18));
+	        	Buttons.buttons[5].setFont(new Font("Arial", Font.BOLD, 20));
+	        	
 	        }
-	        Buttons.buttons[5].setText("Stroke : " + StrokeChooser.stroke);
+	        DrawScreen.strokeButton[0].setText("Stroke Size : " + StrokeChooser.stroke);
+	        Buttons.buttons[5].setText(DrawScreen.strokeStyleName +" : " + StrokeChooser.stroke);
 		}
     }
 }

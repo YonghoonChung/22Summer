@@ -12,11 +12,12 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyListener;
 
 @SuppressWarnings("serial")
-public class Frame extends JFrame {
+public class Frame extends JFrame implements KeyListener{
 	// class private variable
 	private static String name;
 	static JFrame fr = new JFrame(name);
@@ -38,6 +39,7 @@ public class Frame extends JFrame {
 		// fr.setLayout(new GridLayout(2, 1,5,5));
 		fr.setLayout(null);
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 
 		// DrawScreen drawing =new DrawScreen();
 		panel.setLayout(null);
@@ -55,6 +57,8 @@ public class Frame extends JFrame {
 		screen2.setOpaque(true);
 		screen2.setText("asdfasdf");
 		screen2.setHorizontalAlignment(JLabel.CENTER);
+		
+		
 		controlScreenPanel.setLayout(new GridLayout(2, 1));
 		controlScreenPanel.setBorder(new TitledBorder(new LineBorder(Color.RED, 6), "Mode Status"));
 		controlScreenPanel.setBackground(Color.WHITE);
@@ -68,7 +72,29 @@ public class Frame extends JFrame {
 		}
 		fr.add(panel2);
 		fr.add(panel);
+		
 
 		fr.setVisible(true);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		System.out.println("123");
+		// TODO Auto-generated method stub
+		System.out.println(e);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		System.out.println("123");
+		// TODO Auto-generated method stub
+		System.out.println(e);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		System.out.println("123");
+		// TODO Auto-generated method stub
+		System.out.println(e);
 	}
 }
