@@ -53,12 +53,14 @@ public class DrawScreen extends JPanel {
 
 	Timer timer;
 	TimerTask task;
-	static int showTextPanel = -1;
 	static boolean strokeStyleFlag = true;
 	static String strokeStyleName = "Line";
+	static int showTextPanel1 = -1;
+	static int showTextPanel2 = -1;
 
 	public DrawScreen() {
 		String strokeButtonNames[] = { "Stroke Size : " + StrokeChooser.stroke, "Stroke Style - 1" };
+		String shapeButtonNames[] = { "Line", "Rectangle", "Circle" };
 
 		setBackground(Color.WHITE);
 		Frame.panel2.add(this);
@@ -69,9 +71,46 @@ public class DrawScreen extends JPanel {
 		addMouseMotionListener(listener);
 		setBackground(Color.WHITE);
 		this.setLayout(null);
-		buttonPanel2.setBounds(775, 0, 325, 60);
-
-		buttonPanel2.setBounds(775, 0, 325, 60);
+		
+		buttonPanel1.setBounds(0, 0, 348, 60);
+		buttonPanel1.setLayout(null);
+		buttonPanel1.setLayout(new GridLayout(1, 3, 10, 10));
+		buttonPanel1.setOpaque(true);
+		buttonPanel1.setVisible(false);
+		for (int i = 0; i < shapeButton.length; i++) {
+			shapeButton[i] = new JButton(shapeButtonNames[i]);
+			shapeButton[i].setBackground(Color.GRAY);
+			shapeButton[i].setForeground(Color.WHITE);
+			shapeButton[i].setFont(new Font("Arial", Font.BOLD, 16));
+			shapeButton[i].setUI (new MetalButtonUI () {//버튼 누를때 안나오게 하기
+			    protected void paintButtonPressed (Graphics g, AbstractButton b) { }
+			});
+			shapeButton[i].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource().equals(shapeButton[0])) {
+						Buttons.setInit();
+						Buttons.draw[0]=true;
+						Buttons.buttons[0].setBorderPainted(true);
+						Buttons.undoFlag = false;
+						Frame.screen2.setText("Line");
+					} else if(e.getSource().equals(shapeButton[1])){
+						Buttons.setInit();
+						Buttons.draw[1]=true;
+						Buttons.buttons[1].setBorderPainted(true);
+						Buttons.undoFlag = false;
+						Frame.screen2.setText("Rectangle");
+					} else {
+						Buttons.setInit();
+						Buttons.draw[2]=true;
+						Buttons.buttons[2].setBorderPainted(true);
+						Buttons.undoFlag = false;
+						Frame.screen2.setText("Circle");
+					}
+				}
+			});
+			buttonPanel1.add(shapeButton[i]);			
+		}
+		buttonPanel2.setBounds(470, 0, 325, 60);
 		buttonPanel2.setLayout(null);
 		buttonPanel2.setLayout(new GridLayout(1, 2, 10, 10));
 		buttonPanel2.setOpaque(true);
@@ -95,11 +134,11 @@ public class DrawScreen extends JPanel {
 						if (strokeStyleFlag) {
 							strokeButton[1].setText("Stroke Style - 1");
 							strokeStyleName = "Line";
-							Buttons.buttons[5].setText(DrawScreen.strokeStyleName + " : " + StrokeChooser.stroke);
+							Buttons.buttons[3].setText(DrawScreen.strokeStyleName + " : " + StrokeChooser.stroke);
 						} else {
 							strokeButton[1].setText("Stroke Style - 2");
 							strokeStyleName = "Dotted";
-							Buttons.buttons[5].setText(DrawScreen.strokeStyleName + " : " + StrokeChooser.stroke);
+							Buttons.buttons[3].setText(DrawScreen.strokeStyleName + " : " + StrokeChooser.stroke);
 
 						}
 					}

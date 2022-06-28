@@ -65,7 +65,7 @@ public class Frame extends JFrame implements KeyListener{
 		controlScreenPanel.add(screen1);
 		controlScreenPanel.add(screen2);
 
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 7; i++) {
 			panel.add(buttons.buttons[i]);
 			if (i == 3)
 				panel.add(controlScreenPanel);

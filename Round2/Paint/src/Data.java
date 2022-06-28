@@ -17,6 +17,7 @@ public class Data {
 		this.sketch = null;
 		this.strokeType = strokeStyle;
 	}
+	
 
 	public Data(ArrayList<Point> ske, Color color, int stroke, boolean strokeStyle) {
 		this.shape = null;

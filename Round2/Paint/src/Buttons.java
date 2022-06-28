@@ -12,25 +12,23 @@ import javax.swing.plaf.metal.MetalButtonUI;
 
 
 public class Buttons extends JButton implements MouseListener{
-	public static JButton[] buttons = new JButton[9];
+	public static JButton[] buttons = new JButton[7];
 	static boolean[] draw = new boolean[4]; // 라인인지,
 	static boolean erase = false;
 	//static boolean lastButton = false; //false -> shape, true -> sketch
-	boolean undoFlag = false;
+	static boolean undoFlag = false;
 	private boolean allClearFlag = false;
 	Timer timer;
 	TimerTask task;
 	
 	int count = 0;
 
-	String buttonNames[] = { "Line", "Rectangle", "Circle", "Sketch", "Color", "Stroke", "Erase", "Undo", "Redo" };
+	String buttonNames[] = { "Shapes", "Sketch", "Color", "Stroke", "Erase", "Undo", "Redo" };
 
 	public Buttons() {
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i] = new JButton(buttonNames[i]);
-			if (i == 5) {
-				buttons[i].setText(DrawScreen.strokeStyleName + " : " + StrokeChooser.stroke);
-			}
+			
 			buttons[i].setVisible(true);
 			buttons[i].addMouseListener(this);
 			buttons[i].setFont(new Font("Arial", Font.BOLD, 20));
@@ -49,50 +47,37 @@ public class Buttons extends JButton implements MouseListener{
 		JButton button = (JButton) e.getSource();
 		String str = button.getText();
 		if (button == buttons[0]) { // line
-			setInit();
-			draw[0] = true;
-			buttons[0].setBorderPainted(true);
-			undoFlag = false;
+			DrawScreen.showTextPanel1 *= -1; //버튼이 눌리면 양음 변화
+			if(DrawScreen.showTextPanel1 == 1) DrawScreen.buttonPanel1.setVisible(true); //눌려서 panel이 보이게
+			else if(DrawScreen.showTextPanel1 == -1) DrawScreen.buttonPanel1.setVisible(false); //눌려서 panel이 안보이게
 		}
-		if (button == buttons[1]) { // Rectangle
-			setInit();
-			draw[1] = true;
-			buttons[1].setBorderPainted(true);
-			undoFlag = false;
-			// print();
-		}
-		if (button == buttons[2]) { // Circle
-			setInit();
-			draw[2] = true;
-			buttons[2].setBorderPainted(true);
-			undoFlag = false;
-		}
-		if (button == buttons[3]) { // Sketch
+		if (button == buttons[1]) { // Sketch
 			setInit();
 			draw[3] = true;
 			buttons[3].setBorderPainted(true);
 			undoFlag = false;
 		}
-		if (button == buttons[4]) { // Color
+		if (button == buttons[2]) { // Color
 			new ColorChooser();
 		}
-		if (button == buttons[5]) { // Stroke
-			System.out.println("출력");
-			DrawScreen.showTextPanel *= -1; //버튼이 눌리면 양음 변화
-			if(DrawScreen.showTextPanel == 1) DrawScreen.buttonPanel2.setVisible(true); //눌려서 panel이 보이게
-			else if(DrawScreen.showTextPanel == -1) DrawScreen.buttonPanel2.setVisible(false); //눌려서 panel이 안보이게
-			//new StrokeChooser();
-		}
-		if (button == buttons[6]) { // Erase
+		if (button == buttons[3]) { // Stroke
+			DrawScreen.showTextPanel2 *= -1; //버튼이 눌리면 양음 변화
+			if(DrawScreen.showTextPanel2 == 1) DrawScreen.buttonPanel2.setVisible(true); //눌려서 panel이 보이게
+			else if(DrawScreen.showTextPanel2 == -1) DrawScreen.buttonPanel2.setVisible(false); //눌려서 panel이 안보이게
 			
+		}
+		if (button == buttons[4]) {  // Erase
 			setInit();
 			erase = true;
+			
 		}
-		if (button == buttons[7]) { // Undo
+		if (button == buttons[5]) {  // Undo
 			undo();
+
 		}
-		if (button == buttons[8]) { // redo
+		if (button == buttons[6]) {// redo
 			redo();
+			
 		}
 		Frame.screen2.setText(str);
 	}
@@ -119,7 +104,7 @@ public class Buttons extends JButton implements MouseListener{
 		DrawScreen.memo.add(DrawScreen.redoMemory.pop());
 		Frame.panel2.repaint();
 	}
-	public void setInit() {
+	public static void setInit() {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < draw.length; i++) {
 			draw[i] = false;
@@ -141,7 +126,7 @@ public class Buttons extends JButton implements MouseListener{
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		JButton button = (JButton) e.getSource();
-		if (button == buttons[6]) {
+		if (button == buttons[4]) {
 			System.out.println("누름");
 			count = 1;
 			timer = new Timer();
@@ -159,8 +144,8 @@ public class Buttons extends JButton implements MouseListener{
 					double colorBackground = 128+count*127.0/75+1;
 					 Color color1 = new Color((int)colorForeground,(int)colorForeground,(int)colorForeground);
 					 Color color2 = new Color((int)colorBackground,(int)colorBackground,(int)colorBackground);
-					buttons[6].setBackground(color2);
-					buttons[6].setForeground(color1);
+					buttons[4].setBackground(color2);
+					buttons[4].setForeground(color1);
 					count++; // 실행횟수 증가
 				}
 			};
@@ -171,10 +156,10 @@ public class Buttons extends JButton implements MouseListener{
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		JButton button = (JButton) e.getSource();
-		if (button == buttons[6]) {
+		if (button == buttons[4]) {
 			timer.cancel();
-			buttons[6].setBackground(Color.GRAY);
-			buttons[6].setForeground(Color.WHITE);
+			buttons[4].setBackground(Color.GRAY);
+			buttons[4].setForeground(Color.WHITE);
 			 // 타이머 종료
 		}
 	}
