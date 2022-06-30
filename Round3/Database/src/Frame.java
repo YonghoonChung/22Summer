@@ -47,8 +47,8 @@ public class Frame extends JFrame{
 	JButton pwSearchButton = new JButton("Forgot PW");
 	JButton createAccountButton = new JButton("Create New Account");
 	static RoundRect rectArea;
-	static UserPanel userPanel1;
-	static UserPanel userPanel2;
+	static UserPanel userPanel;
+	static AdminPanel adminPanel;
 	
 	
 	QueryFunctions query = new QueryFunctions();
@@ -65,15 +65,14 @@ public class Frame extends JFrame{
 		rectArea = new RoundRect(1,0,699,449);
 		rectArea.setBounds(200,100,700,450);
 		rectArea.setLayout(null);
-		rectArea.setVisible(false);
+//		rectArea.setVisible(false);
 		
-		userPanel1 = new UserPanel(1,0,699,449);
-		userPanel1.setBounds(200,100, 700, 450);
-//		userPanel1.setVisible(false);
-		userPanel2= new UserPanel(1,0,99,99);
-		userPanel2.setBounds(0,0, 100, 100);
-		userPanel2.setVisible(false);
-		
+		userPanel = new UserPanel(1,0,699,449);
+		userPanel.setBounds(200,100, 700, 450);
+		userPanel.setVisible(false);
+		adminPanel= new AdminPanel(1,0,699,449);
+		adminPanel.setBounds(200,100, 700, 450);
+		adminPanel.setVisible(false);	
 
 		
 		//서브 패널 1
@@ -121,14 +120,23 @@ public class Frame extends JFrame{
 				if(userId.getText().equals("admin") && userPw.getText().equals("1234")) {
 					JOptionPane.showMessageDialog(null, "HELLO ADMIN", "Y2K Project", JOptionPane.PLAIN_MESSAGE);
 					rectArea.setVisible(false);
+					adminPanel.setVisible(true);
 				}else {
-					query.selectLogin(userId.getText(),userPw.getText());
-					System.out.println(QueryFunctions.loginSuccess);
+					String arr[];
+					arr = query.selectLogin(userId.getText(),userPw.getText());
+					if(arr[0] == null) {
+						JOptionPane.showMessageDialog(null, "Please Enter the Correct ID/PW", "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					if(QueryFunctions.loginSuccess == 1){
 						JOptionPane.showMessageDialog(null, "HELLO "+userId.getText() , "Y2K Project", JOptionPane.PLAIN_MESSAGE);
+						userPanel.setName(arr[0]);
+						userPanel.setGender(arr[1]);
+						userPanel.setEmail(arr[2]);
+						userPanel.setId(arr[3]);
 						query.insertLoginLog(userId.getText());
 						rectArea.setVisible(false);//user보이기
-						userPanel1.setVisible(true);
+						userPanel.setVisible(true);
 					
 					}else{
 						JOptionPane.showMessageDialog(null, "Please Enter the Correct ID/PW", "Error", JOptionPane.ERROR_MESSAGE);
@@ -188,10 +196,12 @@ public class Frame extends JFrame{
 		rectArea.add(subPanel2);
 		rectArea.add(subPanel3);
 		//------------------------userPanel
-		userPanel1.drawPanel();
+		userPanel.drawPanel();
+		//------------------------adminPanel
+		adminPanel.drawPanel();
 		
-		fr.add(userPanel2);
-		fr.add(userPanel1);
+		fr.add(adminPanel);
+		fr.add(userPanel);
 		fr.add(rectArea);
 		fr.setVisible(true);
 		

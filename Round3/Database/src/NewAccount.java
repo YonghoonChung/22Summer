@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -16,8 +18,9 @@ public class NewAccount extends JFrame {
 	int rectAreaHeight = 450;
 	boolean idValid = false;
 	boolean passwordValid = false;
+	boolean MF = true;
 	ButtonGroup checkBoxGroup;
-
+	
 	
 	
 	public void doShow() {
@@ -98,9 +101,21 @@ public class NewAccount extends JFrame {
 		JCheckBox c1 = new JCheckBox("Male");
 		c1.setBounds(130,300,60,20);
 		c1.setBackground(Color.WHITE);
+		c1.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				MF = true;
+			}
+		});
 		JCheckBox c2 = new JCheckBox("Female");
 		c2.setBounds(200,300,80,20);
 		c2.setBackground(Color.WHITE);
+		c2.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				MF = false;
+			}
+		});
 		checkBoxGroup = new ButtonGroup();
 		checkBoxGroup.add(c1);
 		checkBoxGroup.add(c2);
@@ -123,12 +138,13 @@ public class NewAccount extends JFrame {
 		confirmButton.button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(validateChecker(idStr.field.getText(), password.field.getText(), name.field.getText(), email.field.getText()+"@"+emailStr.combo.getSelectedItem(), "Female")) {					
-					query.insert(idStr.field.getText(), password.field.getText(), name.field.getText(), email.field.getText()+"@"+emailStr.combo.getSelectedItem(), "Female");
+				System.out.println(MF);
+				if(validateChecker(idStr.field.getText(), password.field.getText(), name.field.getText(), email.field.getText(), (MF) ? "Male" : "Female")) {					
+					query.insert(idStr.field.getText(), password.field.getText(), name.field.getText(), email.field.getText()+"@"+emailStr.combo.getSelectedItem(), (MF) ? "Male" : "Female");
 					JOptionPane.showMessageDialog(null, "Welcome.", "Success", JOptionPane.PLAIN_MESSAGE);
 					fr.dispose();
-				}else {
-					JOptionPane.showMessageDialog(null, "Not Access", "Error", JOptionPane.ERROR_MESSAGE);
+					Frame.userId.setText(idStr.field.getText());
+					Frame.userPw.setText(password.field.getText());
 				}
 			}
 		});
@@ -140,27 +156,40 @@ public class NewAccount extends JFrame {
 	}
 	
 	boolean validateChecker(String id, String pw, String name, String email, String gender) {
-		if(!passwordValid) {
-			return false;
-		}
+			
 		if(!idValid) {
+			JOptionPane.showMessageDialog(null, "ID DupCheck", "Error", JOptionPane.ERROR_MESSAGE);
+			idValid = !idValid;
 			return false;
 		}
-		if(id.length()<=6) {
+		if(id.length()<6) {
+			JOptionPane.showMessageDialog(null, "ID should be longer than 6 letters", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		if(!id.matches("[+-]?\\d*(\\.\\d+)?")&&!id.matches("^[a-zA-Z]*$")) {
+
+		if(id.matches("[+-]?\\d*(\\.\\d+)?")||id.matches("^[a-zA-Z]*$")) {
+			JOptionPane.showMessageDialog(null, "ID should be contain at least 1 letter and 1 number", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		if(pw.length()<=6) {
+		if(!passwordValid) {
+			JOptionPane.showMessageDialog(null, "PW CHECK", "Error", JOptionPane.ERROR_MESSAGE);
+			passwordValid = !passwordValid;
 			return false;
 		}
-		if(!pw.matches("[+-]?\\d*(\\.\\d+)?")&&!pw.matches("^[a-zA-Z]*$")) {
+		if(pw.length()<6) {
+			JOptionPane.showMessageDialog(null, "PW should be longer than 6 letters", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		if(!email.matches("^[a-z0-9A-Z._-]*@[a-z0-9A-Z]*.[a-zA-Z.]*$")) {
+		if(pw.matches("[+-]?\\d*(\\.\\d+)?")||pw.matches("^[a-zA-Z]*$")) {
+			JOptionPane.showMessageDialog(null, "PW should be contain at least 1 letter and 1 number", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
+		if(email.matches("[+-]?\\d*(\\.\\d+)?")||email.matches("^[a-zA-Z]*$")) {
+			JOptionPane.showMessageDialog(null, "Wrong Email Format", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}	
+
+		
 
 		return true;
 		

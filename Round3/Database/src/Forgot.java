@@ -14,7 +14,6 @@ import javax.swing.plaf.metal.MetalButtonUI;
 public class Forgot extends JFrame{
 	QueryFunctions query = new QueryFunctions();
 	JFrame fr = new JFrame("Forgot");
-	Frame fr1;
 	RoundRect rectArea;
 	private boolean isId = false;
 	
@@ -47,8 +46,6 @@ public class Forgot extends JFrame{
 		
 		JButton idButton = new JButton("ID");
 		JButton pwButton = new JButton("PW");
-//		fr1 = new Frame();
-//		System.out.println(fr1.isId());
 		idButton.setUI (new MetalButtonUI () {//버튼 누를때 안나오게 하기
 		    protected void paintButtonPressed (Graphics g, AbstractButton b) { }
 		});

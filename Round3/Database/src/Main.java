@@ -9,8 +9,12 @@ public class Main {
 		JFrame fr1 = new JFrame();
 		Forgot fg = new Forgot();
 		NewAccount na = new NewAccount();
-//		UserPanel userPanel = new UserPanel(1,0,100,100);
+		TruncatePopup tp = new TruncatePopup();
 		fr.doFrame();
+//		tp.doShow();
+//		query.update("klmav12", "1234");
+//		query.delete("as12");
+//		UserPanel userPanel = new UserPanel(1,0,100,100);
 //		fr1.setSize(1100, 700);
 //		fr1.setLocationRelativeTo(null);
 //		fr1.setLayout(null);
@@ -23,6 +27,7 @@ public class Main {
 //		fr1.setVisible(true);
 //		fg.doShow();
 //		na.doShow();
-//		
+//		System.out.println(query.selectLoginLog());
+//		query.truncate("car");
 	}
 }
