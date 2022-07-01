@@ -46,8 +46,9 @@ public class TruncatePopup extends JFrame{
 		truncateConfirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				query.truncate("car");
+				query.truncate("tb_user");
 				JOptionPane.showMessageDialog(null, "Successfully Deleted All the Account", "New Password",JOptionPane.PLAIN_MESSAGE);
+				AdminPanel.info2Label.setText("Total Users : " + query.countUsers());
 				fr.dispose();
 			}
 		});

@@ -119,6 +119,8 @@ public class Frame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if(userId.getText().equals("admin") && userPw.getText().equals("1234")) {
 					JOptionPane.showMessageDialog(null, "HELLO ADMIN", "Y2K Project", JOptionPane.PLAIN_MESSAGE);
+					AdminPanel.info2Label.setText("Total Users : " + query.countUsers());
+					AdminPanel.info1Label.setText("Daily Login Counts : "+ query.selectLoginLog());
 					rectArea.setVisible(false);
 					adminPanel.setVisible(true);
 				}else {

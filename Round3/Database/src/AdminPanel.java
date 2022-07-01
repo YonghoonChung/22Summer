@@ -15,9 +15,9 @@ public class AdminPanel extends RoundRect {
 	JPanel titlePanel = new JPanel();
 	JPanel infoPanel = new JPanel();
 	JLabel titleLabel = new JLabel();
-	JLabel info1Label = new JLabel();
-	JLabel info2Label = new JLabel();
-	JButton truncateButton = new JButton("Delete All Counts");
+	static JLabel info1Label = new JLabel();
+	static JLabel info2Label = new JLabel();
+	JButton truncateButton = new JButton("Delete All Accounts");
 	JButton logoutButton = new JButton("Logout");
 	
 	QueryFunctions query = new QueryFunctions();
