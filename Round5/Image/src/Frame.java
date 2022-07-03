@@ -36,6 +36,7 @@ public class Frame extends JFrame {
 	BufferedImage img = null;
 
 	public BufferedImage manipulatedImage;
+	public static BufferedImage changedImage;
 
 	int frameWidth = 1300;
 	int frameHeight = 800;
@@ -50,7 +51,7 @@ public class Frame extends JFrame {
 	private boolean grayScale = false;
 	private boolean edging = false;
 	private boolean masking = false;
-	
+	private boolean scope = false;
 
 	public void doFrame() {
 		fr.setSize(frameWidth, frameHeight);
@@ -91,17 +92,19 @@ public class Frame extends JFrame {
 					imagePanel.setImageHeight(imageHeight);
 					imagePanel.setImageWidth(imageWidth);
 					imagePanel.repaint();
+					brightScrollPanel.slider.setValue(0);
 					processedPanel.repaint();
+					changedImage = ImagePanel.image;
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				imagePanel.imageColor = new Color[imageWidth][imageHeight];
-				Color color[][] = new Color[imageWidth][imageHeight];
-
-				for (int i = 0; i < imageHeight; i++)
-					for (int j = 0; j < imageWidth; j++)
-						color[j][i] = new Color(imagePanel.image.getRGB(j, i));
+//				imagePanel.imageColor = new Color[imageWidth][imageHeight];
+//				Color color[][] = new Color[imageWidth][imageHeight];
+//
+//				for (int i = 0; i < imageHeight; i++)
+//					for (int j = 0; j < imageWidth; j++)
+//						color[j][i] = new Color(imagePanel.image.getRGB(j, i));
 			}
 		});
 
@@ -112,7 +115,6 @@ public class Frame extends JFrame {
 
 		grayScaleButton.setBounds(10, 10, buttonWidth, buttonHeight);
 		grayScaleButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (ImagePanel.image == null) {
@@ -131,7 +133,10 @@ public class Frame extends JFrame {
 							manipulatedImage.setRGB(x, y, new Color(Y, Y, Y).getRGB());
 						}
 					}
+					changedImage = manipulatedImage;
 					ProcessedPanel.image = manipulatedImage;
+				} else {
+					changedImage = ImagePanel.image;
 				}
 				processedPanel.repaint();
 			}
@@ -140,7 +145,6 @@ public class Frame extends JFrame {
 		brightButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Frame : " + imageHeight + " " + imageWidth);
 				brightScrollPanel.setImageHeight(imageHeight);
 				brightScrollPanel.setImageWidth(imageWidth);
 				if (!brightShow) {
@@ -158,13 +162,13 @@ public class Frame extends JFrame {
 
 		convolutionPanel.setBounds(10, 230, buttonWidth, buttonHeight);
 		convolutionPanel.setLayout(new GridLayout(2, 1, 0, 0));
-//		edgingButton.setFont(new Font("Arial", Font.BOLD, 9));
 		edgingButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (ImagePanel.image == null) {
 					return;
 				}
+				grayScale = false;
 				edging = true;
 				masking = false;
 				convolution.setEdging(edging);
@@ -174,13 +178,13 @@ public class Frame extends JFrame {
 				convolution.doConvolute();
 			}
 		});
-//		maskingButton.setFont(new Font("Arial", Font.BOLD, 9));
 		maskingButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (ImagePanel.image == null) {
 					return;
 				}
+				grayScale = false;
 				edging = false;
 				masking = true;
 				convolution.setEdging(edging);
@@ -194,10 +198,22 @@ public class Frame extends JFrame {
 		scopeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				if (!scope) {
+					ProcessedPanel.image = ImagePanel.image;
+					processedPanel.magnifiedPanel.setVisible(true);
+					scope = true;
+					processedPanel.setScope(scope);
+					processedPanel.setImageHeight(imageHeight);
+					processedPanel.setImageWidth(imageWidth);
+				} else {
+					ProcessedPanel.image = null;
+					processedPanel.magnifiedPanel.setVisible(false);
+					scope = false;
+					processedPanel.setScope(scope);
+				}
+				processedPanel.repaint();
 			}
 		});
-
 
 		convolutionPanel.add(edgingButton);
 		convolutionPanel.add(maskingButton);

@@ -61,18 +61,14 @@ public class BrightScrollPanel extends JPanel {
 				if (ImagePanel.image == null) {
 					return;
 				}
-				System.out.println("test : 1");
 				DeepCopy dCopy = new DeepCopy();
-				if(ProcessedPanel.image != null) {
-					manipulatedImage = dCopy.deepCopy(ProcessedPanel.image);					
+				if(Frame.changedImage != null) {
+					manipulatedImage = dCopy.deepCopy(Frame.changedImage);					
 				}else {					
 					manipulatedImage = dCopy.deepCopy(ImagePanel.image);
 				}
-//				ProcessedPanel.image = ImagePanel.image;
-				System.out.println("BSP : " + imageHeight + " " + imageWidth);
 				Frame.processedPanel.setImageHeight(imageHeight);
 				Frame.processedPanel.setImageWidth(imageWidth);
-				System.out.println("test : 2");
 				for (int y = 0; y < imageHeight; y++) {
 					for (int x = 0; x < imageWidth; x++) {
 						Color color = new Color(manipulatedImage.getRGB(x, y));
@@ -100,7 +96,6 @@ public class BrightScrollPanel extends JPanel {
 				}
 				ProcessedPanel.image = manipulatedImage;
 				Frame.processedPanel.repaint();
-				System.out.println("test : 3");
 			}
 
 		});

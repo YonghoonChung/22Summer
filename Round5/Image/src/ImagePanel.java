@@ -3,19 +3,28 @@ import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel {
 	private int frameHeight;
 	private int imageHeight;
 	private int imageWidth;
+	
+
+
 	static BufferedImage image = null;
+
 	public void setFrameHeight(int frameHeight) {
 		this.frameHeight = frameHeight;
 	}
+
 	public void setImageWidth(int imageWidth) {
 		this.imageWidth = imageWidth;
 	}
+
 	public void setImageHeight(int imageHeight) {
 		this.imageHeight = imageHeight;
 	}
@@ -28,6 +37,21 @@ public class ImagePanel extends JPanel {
 		setBackground(Color.BLUE);
 		setOpaque(true);
 		setVisible(true);
+		addMouseMotionListener(new MouseMotionListener() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				Frame.processedPanel.setMouseX(e.getX());
+				Frame.processedPanel.setMouseY(e.getY());
+				Frame.processedPanel.repaint();
+//				System.out.println(e.getX() + " " +e.getY());
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	@Override
@@ -40,7 +64,7 @@ public class ImagePanel extends JPanel {
 			int h = 0;
 			if (imageWidth > imageHeight) {
 				System.out.println("1");
-				ratio = ((double) Frame.imageProcessSize) / ((double)imageWidth);
+				ratio = ((double) Frame.imageProcessSize) / ((double) imageWidth);
 				w = (int) (imageWidth * ratio);
 				h = (int) (imageHeight * ratio);
 			} else {

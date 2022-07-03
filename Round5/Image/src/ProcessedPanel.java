@@ -7,30 +7,17 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 public class ProcessedPanel extends JPanel{
+	JPanel magnifiedPanel = new JPanel();
 	private int frameWidth;
 	private int frameHeight;
 	private int buttonPanelWidth;
 	private int imageHeight;
 	private int imageWidth;
+	private int count = 0;
+	private int mouseX = 0;
+	private int mouseY = 0;
+	private boolean scope;
 	static BufferedImage image = null;
-	public void setFrameWidth(int frameWidth) {
-		this.frameWidth = frameWidth;
-	}
-
-	public void setFrameHeight(int frameHeight) {
-		this.frameHeight = frameHeight;
-	}
-
-	public void setButtonPanelWidth(int buttonPanelWidth) {
-		this.buttonPanelWidth = buttonPanelWidth;
-	}
-
-	public void setImageWidth(int imageWidth) {
-		this.imageWidth = imageWidth;
-	}
-	public void setImageHeight(int imageHeight) {
-		this.imageHeight = imageHeight;
-	}
 	
 	public void doFrame() {
 		// TODO Auto-generated method stub
@@ -38,23 +25,32 @@ public class ProcessedPanel extends JPanel{
 		setBackground(Color.BLUE);
 		setOpaque(true);
 		setVisible(true);	
+		setLayout(null);
+		
+		magnifiedPanel.setBounds(0,0,100,100);
+		magnifiedPanel.setBackground(Color.ORANGE);
+		magnifiedPanel.setOpaque(true);
+		magnifiedPanel.setVisible(false);
+		
+		this.add(magnifiedPanel);
 	}
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-		System.out.println("ProcessedPanel : " + imageHeight +" " +imageWidth);
+		magnifiedPanel.setBounds((mouseX-50),(mouseY-50),100,100);
+		if(scope) {
+			
+		}
 		if (image != null) {
 			double ratio = 0.0;
 			int w = 0;
 			int h = 0;
 			if (imageWidth> imageHeight) {
-				System.out.println("1");
 				ratio = ((double) Frame.imageProcessSize) / ((double) imageWidth);
 				w = (int) (imageWidth * ratio);
 				h = (int) (imageHeight * ratio);
 			} else {
-				System.out.println("2");
 				ratio = ((double) Frame.imageProcessSize) / ((double) imageHeight);
 				w = (int) (imageWidth * ratio);
 				h = (int) (imageHeight * ratio);
@@ -69,4 +65,28 @@ public class ProcessedPanel extends JPanel{
 		}
 	}
 	
+	public void setScope(boolean scope) {
+		this.scope = scope;
+	}
+	public void setMouseX(int mouseX) {
+		this.mouseX = mouseX;
+	}
+	public void setMouseY(int mouseY) {
+		this.mouseY = mouseY;
+	}
+	public void setFrameWidth(int frameWidth) {
+		this.frameWidth = frameWidth;
+	}
+	public void setFrameHeight(int frameHeight) {
+		this.frameHeight = frameHeight;
+	}
+	public void setButtonPanelWidth(int buttonPanelWidth) {
+		this.buttonPanelWidth = buttonPanelWidth;
+	}
+	public void setImageWidth(int imageWidth) {
+		this.imageWidth = imageWidth;
+	}
+	public void setImageHeight(int imageHeight) {
+		this.imageHeight = imageHeight;
+	}
 }

@@ -112,6 +112,7 @@ public class Convolution extends JPanel {
 				resultImage.setRGB(j, i, color.getRGB());
 			}
 		}
+		Frame.changedImage = resultImage;
 		ProcessedPanel.image = resultImage;
 		Frame.processedPanel.repaint();
 	}
