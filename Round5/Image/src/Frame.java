@@ -22,7 +22,10 @@ public class Frame extends JFrame {
 	static ProcessedPanel processedPanel = new ProcessedPanel();
 	BrightScrollPanel brightScrollPanel = new BrightScrollPanel();
 	Convolution convolution = new Convolution();
+	Blur blurring = new Blur();
 	DeepCopy dCopy = new DeepCopy();
+	MagnifiedPanel magPanel = new MagnifiedPanel();
+	
 
 	JPanel buttonPanel = new JPanel();
 	JPanel convolutionPanel = new JPanel();
@@ -31,6 +34,7 @@ public class Frame extends JFrame {
 	JButton maskingButton = new JButton("masking");
 	JButton grayScaleButton = new JButton("GrayScale");
 	JButton brightButton = new JButton("BrightScale");
+	JButton blurButton = new JButton("Blur");
 	JButton scopeButton = new JButton("Scope");
 	JFileChooser fileChooser = new JFileChooser();
 	BufferedImage img = null;
@@ -194,7 +198,16 @@ public class Frame extends JFrame {
 				convolution.doConvolute();
 			}
 		});
-		scopeButton.setBounds(10, 370, buttonWidth, buttonHeight);
+		blurButton.setBounds(10, 305, buttonWidth, buttonHeight);
+		blurButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				processedPanel.setImageHeight(imageHeight);
+				processedPanel.setImageWidth(imageWidth);
+				blurring.doBlur();
+			}
+		});
+		scopeButton.setBounds(10, 380, buttonWidth, buttonHeight-5);
 		scopeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -202,14 +215,18 @@ public class Frame extends JFrame {
 					ProcessedPanel.image = ImagePanel.image;
 					processedPanel.magnifiedPanel.setVisible(true);
 					scope = true;
+					magPanel.setScope(scope);
 					processedPanel.setScope(scope);
+					imagePanel.setScope(scope);
 					processedPanel.setImageHeight(imageHeight);
 					processedPanel.setImageWidth(imageWidth);
 				} else {
 					ProcessedPanel.image = null;
 					processedPanel.magnifiedPanel.setVisible(false);
 					scope = false;
+					magPanel.setScope(scope);
 					processedPanel.setScope(scope);
+					imagePanel.setScope(scope);
 				}
 				processedPanel.repaint();
 			}
@@ -218,6 +235,7 @@ public class Frame extends JFrame {
 		convolutionPanel.add(edgingButton);
 		convolutionPanel.add(maskingButton);
 		buttonPanel.add(brightScrollPanel);
+		buttonPanel.add(blurButton);
 		buttonPanel.add(scopeButton);
 		buttonPanel.add(brightButton);
 		buttonPanel.add(grayScaleButton);

@@ -12,8 +12,12 @@ public class ImagePanel extends JPanel {
 	private int frameHeight;
 	private int imageHeight;
 	private int imageWidth;
-	
+	private boolean scope;
 
+
+	public void setScope(boolean scope) {
+		this.scope = scope;
+	}
 
 	static BufferedImage image = null;
 
@@ -34,16 +38,21 @@ public class ImagePanel extends JPanel {
 	public void doFrame() {
 		// TODO Auto-generated method stub
 		setBounds(5, frameHeight / 2 - Frame.imageProcessSize / 2, Frame.imageProcessSize, Frame.imageProcessSize);
-		setBackground(Color.BLUE);
+		setBackground(Color.LIGHT_GRAY);
 		setOpaque(true);
 		setVisible(true);
 		addMouseMotionListener(new MouseMotionListener() {
+			
+
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				Frame.processedPanel.setMouseX(e.getX());
-				Frame.processedPanel.setMouseY(e.getY());
-				Frame.processedPanel.repaint();
-//				System.out.println(e.getX() + " " +e.getY());
+				if(scope) {
+					Frame.processedPanel.setMouseX(e.getX());
+					Frame.processedPanel.setMouseY(e.getY());
+					ProcessedPanel.magnifiedPanel.setMouseX(e.getX());
+					ProcessedPanel.magnifiedPanel.setMouseY(e.getY());
+					Frame.processedPanel.repaint();
+				}
 			}
 
 			@Override
@@ -58,6 +67,7 @@ public class ImagePanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
+
 		if (image != null) {
 			double ratio = 0.0;
 			int w = 0;
