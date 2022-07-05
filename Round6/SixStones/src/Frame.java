@@ -19,13 +19,15 @@ public class Frame extends JFrame{
 	GamePanel gamePanel = new GamePanel();
 	static JLabel bwLabel = new JLabel();
 	JLabel blockLabel = new JLabel();
-	JTextField blockTextField = new JTextField();
-	JButton blockButton = new JButton("Confirm");
+	static JTextField blockTextField = new JTextField();
+	static JButton blockButton = new JButton("Confirm");
 	JButton resetButton = new JButton("Reset");
-	JButton swapButton = new JButton("Swap");
+	static JButton swapButton = new JButton("Swap");
 	JButton undoButton = new JButton("Undo");
 	
 	static int blockCount = 0;
+	static boolean finish = false;
+	static boolean swap = false;
 	
 	public void doFrame() {
 		fr.setSize(1200,750);
@@ -46,7 +48,11 @@ public class Frame extends JFrame{
 				Memory.points.clear();
 				bwLabel.setText("BLACK's TURN");
 				blockButton.setEnabled(false);
+				swapButton.setEnabled(true);
 				gamePanel.repaint();
+				finish = false;
+				blockCount = 0;
+				blockTextField.setText("");
 				for (int i = 0; i < GamePanel.bwMatrix.length; i++) { // --------> 이거 reset누르면 초기화되는지 확인 필요
 					for (int j = 0; j < GamePanel.bwMatrix[0].length; j++) {
 						GamePanel.bwMatrix[i][j] = -1;
@@ -62,7 +68,24 @@ public class Frame extends JFrame{
 		bwLabel.setFont(new Font("Arial", Font.BOLD, 55));
 		bwLabel.setText("BLACK's TURN");
 
-		swapButton.setBounds(925,5,70,40);
+		swapButton.setBounds(925,5,70,40); //swap 버튼
+		swapButton.setBackground(Color.BLACK); // 처음에는 흑으로 시작 -> 흑 false
+		swapButton.setForeground(Color.WHITE);
+		swapButton.setEnabled(true);
+		swapButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(swap) { 
+					swapButton.setBackground(Color.BLACK);
+					swapButton.setForeground(Color.WHITE);
+					swap = false;
+				}else {
+					swapButton.setBackground(Color.WHITE);
+					swapButton.setForeground(Color.BLACK);
+					swap = true;
+				}
+			}
+		});
 
 		gamePanel.drawPanel();
 		
@@ -117,6 +140,8 @@ public class Frame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+//					System.out.println(Memory.points.si);
+					GamePanel.bwMatrix[Memory.points.get(Memory.points.size()-1).i][Memory.points.get(Memory.points.size()-1).j] = -1;
 					Memory.undoPoints.add(Memory.points.pop());
 					if (Memory.points.size() < Frame.blockCount) {
 						Frame.bwLabel.setText("Setting Blocks");
@@ -127,7 +152,8 @@ public class Frame extends JFrame{
 					} else {
 						Frame.bwLabel.setText("WHITE's TURN");
 					}
-					gamePanel.repaint();					
+					gamePanel.repaint();	
+					finish = false;
 				}catch(RuntimeException e1) {
 					
 				}
